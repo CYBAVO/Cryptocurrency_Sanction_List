@@ -13,16 +13,6 @@ on:
     branches: [ main ]
   schedule:
     - cron: '*/5 * * * *'
-    
-# ┌───────────── minute (0 - 59)
-# │ ┌───────────── hour (0 - 23)
-# │ │ ┌───────────── day of the month (1 - 31)
-# │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
-# │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
-# │ │ │ │ │
-# │ │ │ │ │
-# │ │ │ │ │
-# * * * * *
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -37,7 +27,7 @@ jobs:
             curl https://www.treasury.gov/ofac/downloads/sdnlist.txt > sdnlist.txt
       - name: Parser blocklist to csv
         run: |
-            cat sdnlist.txt | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/ /g' |sed 's/Digital Currency Address/\nDigital Currency Address/g' |grep "Digital Currency Address" |sed -E 's/(Digital Currency Address - [A-Za-z0-9]+ [A-Za-z0-9]+) /\1/g' |awk '{print $5,$6}' |sed -E 's/;|[\[\(].*//g' |sort -u |sed -E 's/ /,/g' > sdnlist.csv
+            cat sdnlist.txt | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/ /g' |sed 's/Digital Currency Address/\nDigital Currency Address/g' |grep "Digital Currency Address" |sed -E 's/(Digital Currency Address - [A-Za-z0-9]+ [A-Za-z0-9]+) /\1/g' |awk '{print $5,$6}' |sed -E 's/;|[\[\(].*//g' |sort -u |sed -E 's/ /,/g' |sed 's/XBT/BTC/g' > sdnlist.csv
       - name: Save to branch
         uses: peaceiris/actions-gh-pages@v3
         with:
