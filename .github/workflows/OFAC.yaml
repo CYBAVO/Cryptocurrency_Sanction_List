@@ -27,7 +27,22 @@ jobs:
             curl https://www.treasury.gov/ofac/downloads/sdnlist.txt > sdnlist.txt
       - name: Parser blocklist to csv
         run: |
-            cat sdnlist.txt | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/ /g' |sed 's/Digital Currency Address/\nDigital Currency Address/g' |grep "Digital Currency Address" |sed -E 's/(Digital Currency Address - [A-Za-z0-9]+ [A-Za-z0-9]+) /\1/g' |awk '{print $5,$6}' |sed -E 's/;|[\[\(].*//g' |sort -u |sed -E 's/ /,/g' |sed 's/XBT/BTC/g' |sed 's/USDT,0/ETH,0/g' |sed -E 's/USDT/BTC/g' | sed 's/ETC/ETH/g' > sdnlist.csv
+            cat sdnlist.txt \
+            | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/ /g' \
+            | sed 's/Digital Currency Address/\nDigital Currency Address/g' \
+            | grep "Digital Currency Address" |sed -E 's/(Digital Currency Address - [A-Za-z0-9]+ [A-Za-z0-9]+) /\1/g' \
+            | awk '{print $5,$6}' |sed -E 's/;|[\[\(].*//g' |sort -u |sed -E 's/ /,/g' \
+            | sed 's/XBT/BTC/g' \
+            | sed 's/USDT,0/ETH,0/g' \
+            | sed -E 's/USDT/BTC/g' \
+            | sed 's/ETC/ETH/g' > sdnlist.csv
+      - name: Filter Coin
+        run: |
+            cat sdnlist.csv \
+            | grep -v '^BTG' \
+            | grep -v '^XMR' \
+            | grep -v '^XVG' \
+            | grep -v '^ZEC' > sdnlist.csv
       - name: Save to branch
         uses: peaceiris/actions-gh-pages@v3
         with:
