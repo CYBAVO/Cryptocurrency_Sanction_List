@@ -45,7 +45,7 @@ jobs:
             | grep -v '^XMR' \
             | grep -v '^XVG' \
             | grep -v '^ZEC' > sdnlist.csv
-            sdnlist.csv
+            cat sdnlist.csv
       - name: Save to branch
         uses: peaceiris/actions-gh-pages@v3
         with:
