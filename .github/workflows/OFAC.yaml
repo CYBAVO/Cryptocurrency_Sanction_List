@@ -25,6 +25,7 @@ jobs:
       - name: Get OFAC sdnlist.txt
         run: |
             curl https://www.treasury.gov/ofac/downloads/sdnlist.txt > sdnlist.txt
+            cat sdnlist.txt
       - name: Parser blocklist to csv
         run: |
             cat sdnlist.txt \
@@ -36,6 +37,7 @@ jobs:
             | sed 's/USDT,0/ETH,0/g' \
             | sed -E 's/USDT/BTC/g' \
             | sed 's/ETC/ETH/g' > sdnlist.csv
+            cat sdnlist.csv
       - name: Filter Coin
         run: |
             cat sdnlist.csv \
@@ -43,6 +45,7 @@ jobs:
             | grep -v '^XMR' \
             | grep -v '^XVG' \
             | grep -v '^ZEC' > sdnlist.csv
+            sdnlist.csv
       - name: Save to branch
         uses: peaceiris/actions-gh-pages@v3
         with:
