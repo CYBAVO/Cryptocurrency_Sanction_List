@@ -12,7 +12,7 @@ on:
   pull_request:
     branches: [ main ]
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 */2 * *'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -32,11 +32,13 @@ jobs:
             | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/ /g' \
             | sed 's/Digital Currency Address/\nDigital Currency Address/g' \
             | grep "Digital Currency Address" |sed -E 's/(Digital Currency Address - [A-Za-z0-9]+ [A-Za-z0-9]+) /\1/g' \
-            | awk '{print $5,$6}' |sed -E 's/;|[\[\(].*//g' |sort -u |sed -E 's/ /,/g' \
+            | awk '{print $5,$6}' |sed -E 's/;|[\[\(].*//g' |sed -E 's/ /,/g' \
             | sed 's/XBT/BTC/g' \
             | sed 's/USDT,0/ETH,0/g' \
-            | sed -E 's/USDT/BTC/g' \
-            | sed 's/ETC/ETH/g' > sdnlist.csv
+            | sed 's/USDC,0/ETH,0/g' \
+            | sed 's/USDT/BTC/g' \
+            | sed 's/ETC/ETH/g' \
+            | sort -u > sdnlist.csv
             cat sdnlist.csv
       - name: Filter Coin
         run: |
