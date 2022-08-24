@@ -33,16 +33,21 @@ jobs:
             | sed 's/Digital Currency Address/\nDigital Currency Address/g' \
             | grep "Digital Currency Address" |sed -E 's/(Digital Currency Address - [A-Za-z0-9]+ [A-Za-z0-9]+) /\1/g' \
             | awk '{print $5,$6}' |sed -E 's/;|[\[\(].*//g' |sed -E 's/ /,/g' \
+            | sort -u > sdnlist_step1.csv
+            cat sdnlist_step1.csv
+      - name: Filter Coin
+        run: |
+            cat sdnlist_step1.csv \
             | sed 's/XBT/BTC/g' \
             | sed 's/USDT,0/ETH,0/g' \
             | sed 's/USDC,0/ETH,0/g' \
             | sed 's/USDT/BTC/g' \
             | sed 's/ETC/ETH/g' \
-            | sort -u > sdnlist.csv
-            cat sdnlist.csv
+            | sort -u > sdnlist_step2.csv
+            cat sdnlist_step2.csv
       - name: Filter Coin
         run: |
-            cat sdnlist.csv \
+            cat sdnlist_step2.csv \
             | grep -v '^BTG' \
             | grep -v '^XMR' \
             | grep -v '^XVG' \
