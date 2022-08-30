@@ -1,7 +1,7 @@
 # Fetch Cryptocurrency Sanction List
 
 ## How to work?
-Github Action fetch data
+[Github Action](./.github/workflows/OFAC.yaml) fetch data
 
 ## Source:
 ### OFAC
